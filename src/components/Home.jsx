@@ -1,12 +1,13 @@
 import React, { useContext, useLayoutEffect, useRef } from 'react'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import vertexShader from '../shaders/vertexshader.glsl'
-import fragmentShader from '../shaders/fragmentshader.glsl'
-import { AssetProvider } from '../Context/AssetProvider.jsx'
-const MainScene = () => {
+import vertexShader from '../shaders/vertexshader.glsl?raw'
+import fragmentShader from '../shaders/fragmentshader.glsl?raw'
+import { AssetContext } from '../Context/AssetContext.jsx'
+
+const Home = () => {
     const mountRef = useRef()
-    const manager = useContext(AssetProvider)
+    const manager = useContext(AssetContext)
 
     useLayoutEffect(() => {
         // Scene setup
@@ -78,10 +79,10 @@ const MainScene = () => {
 
     return (
         <>
-            <canvas ref={mountRef} style={{ width: '100vw', height: '100vh' }}></canvas>
-            <div className="sec w-screen h-full bg-orange-500"></div>
+            <canvas ref={mountRef}></canvas>
+            <div className="sec w-screen h-screen relative top-0 left-0 bg-orange-500 pointer-events-none" style={{ zIndex: 10 }}></div>
         </>
     )
 }
 
-export default MainScene
+export default Home

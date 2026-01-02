@@ -1,10 +1,10 @@
 import React from 'react'
 
-const Loader = ({progress}) => {
+const Loader = ({ progress }) => {
     return (
         <>
-            <div className="loaderScreen overflow-hidden bg-[#ebebeb] text-black w-full h-screen flex items-center justify-center">
-                <div className="percentage font-bold text-[13px]">{progress}</div>
+            <div className="loaderScreen fixed top-0 left-0 overflow-hidden bg-[#ebebeb] text-black w-full h-screen flex items-center justify-center" style={{ zIndex: 9999 }}>
+                <div className="percentage font-bold text-[13px]">{Math.round(progress)}%</div>
             </div>
         </>
     )
