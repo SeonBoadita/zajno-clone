@@ -4,8 +4,13 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import vertexShader from '../shaders/vertexshader.glsl?raw'
 import fragmentShader from '../shaders/fragmentshader.glsl?raw'
 import { AssetContext } from '../Context/AssetContext.jsx'
+import gsap from 'gsap'
+import { ScrollSmoother, ScrollTrigger } from 'gsap/all'
 
 const Home = () => {
+    gsap.registerPlugin(ScrollSmoother, ScrollTrigger);
+    const cameraImage = useRef(null);
+    const heroDiv = useRef()
     const mountRef = useRef()
     const manager = useContext(AssetContext)
 
@@ -27,7 +32,7 @@ const Home = () => {
             }
         })
         const cube = new THREE.Mesh(geometry, material)
-        scene.add(cube)
+        // scene.add(cube)
 
 
         const renderer = new THREE.WebGLRenderer({ canvas: mountRef.current, antialias: true, alpha: true })
@@ -64,7 +69,30 @@ const Home = () => {
             renderer.render(scene, camera)
         }
         animate()
+        let ctx = gsap.context(() => {
 
+            ScrollSmoother.create({
+                wrapper: "#smooth-wrapper",
+                content: "#smooth-content",
+                smooth: 1.2,
+                effects: true
+            });
+
+            gsap.to(cameraImage.current, {
+                scrollTrigger: {
+                    trigger: heroDiv.current,
+                    start: "top top",
+                    end: "bottom top",
+                    markers: true,
+                    scrub: true
+                },
+                top: "80vh"
+            })
+            return (() => {
+                ctx.revert();
+            })
+
+        })
 
         // Cleanup
         return () => {
@@ -79,8 +107,32 @@ const Home = () => {
 
     return (
         <>
-            <canvas ref={mountRef}></canvas>
-            <div className="sec w-screen h-screen relative top-0 left-0 bg-orange-500 pointer-events-none" style={{ zIndex: 10 }}></div>
+            <div id="smooth-wrapper">
+                <div id="smooth-content">
+                    <canvas className='absolute' ref={mountRef}></canvas>
+
+                    <div ref={heroDiv} className="hero relative w-full h-[200vh] top-0 left-0">
+                        <div className="logo">
+                            <img className='absolute top-0 z-20 left-0' src="../../public/images/logo.png" alt="" />
+                        </div>
+
+                        <div className="camer relative w-[95vw] left-[2.5vw]">
+                            <img ref={cameraImage} className='absolute object-cover top-[50vh] z-10 left-0' src="../../public/images/camera.png" alt="" />
+
+                            <div className="absolute button -translate-x-1/2 w-auto z-20 h-20 top-[120vh] left-1/2 text-white flex items-center justify-around gap-2">
+                                <div className="playButton cursor-pointer w-20 h-20 bg-white rounded-full  transition-transform duration-500 ease-in-out hover:scale-90 flex items-center justify-center">
+                                    <i className="fa-solid fa-play text-black"></i>
+                                </div>
+                                <div className="text cursor-default">
+                                    <div className="upperText text-[25px] font-bold">Watch Showreel</div>
+                                    <div className="lowerText text-[10px] font-bold">2015-23</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="sec w-screen h-screen relative top-0 left-0 bg-black pointer-events-none" style={{ zIndex: 10 }}></div>
+                </div>
+            </div>
         </>
     )
 }
