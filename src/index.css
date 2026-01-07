@@ -22,7 +22,9 @@ body,
   background-color: #EBEBEB;
   overflow-x: hidden;
 }
-
+img{
+  opacity: 0;
+}
 
 /* @layer utilities {
   .no-scrollbar::-webkit-scrollbar {
